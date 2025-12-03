@@ -1,13 +1,13 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonList } from '@ionic/react';
 import './Tab1.css';
+import RepoItem from '../components/RepoItem';
 
 const Tab1: React.FC = () => {
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Tab 1</IonTitle>
+          <IonTitle>Repositorios</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
@@ -16,7 +16,20 @@ const Tab1: React.FC = () => {
             <IonTitle size="large">Tab 1</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <ExploreContainer name="Tab 1 page" />
+        <IonList>
+          <RepoItem
+            name="android-project"
+            imageUrl="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Android_robot.svg/1745px-Android_robot.svg.png"
+          />
+          <RepoItem
+            name="ios-project"
+            imageUrl="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCvh-j7HsTHJ8ZckknAoiZMx9VcFmsFkv72g&s"
+          />
+          <RepoItem
+            name="ionic-project"
+            imageUrl="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqJZuk231xDvLafBXK6I47B32mywaPb-4GBw&s"
+          />
+        </IonList>
       </IonContent>
     </IonPage>
   );
