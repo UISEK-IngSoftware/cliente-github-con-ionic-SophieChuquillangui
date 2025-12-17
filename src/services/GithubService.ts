@@ -1,8 +1,9 @@
 import axios from "axios"; 
 import { RepositoryItem } from "../interfaces/RepositoryItem";
+import { UserInfo } from "../interfaces/UserInfo";
 
-const GITHUB_API_URL = "https://api.github.com";
-const GITHUB_API_TOKEN = "ghp_XXXXXXXXXXXXXXXXXXXXXXXX";
+const GITHUB_API_URL = import.meta.env.VITE_API_URL;
+const GITHUB_API_TOKEN = import.meta.env.VITE_GITHUB_API_TOKEN;
 
 //Llamada a la API con Axios: try-catch
 export const fetchRepositories = async (): Promise<RepositoryItem[]> => {
@@ -15,7 +16,9 @@ export const fetchRepositories = async (): Promise<RepositoryItem[]> => {
         params:{
             per_page: 100,
             sort: "created",
-            direction: "desc"}
+            direction: "desc",
+            affiliation: "owner"
+            }
 
         }); 
         
@@ -35,3 +38,39 @@ export const fetchRepositories = async (): Promise<RepositoryItem[]> => {
             return [];
         }
     }
+
+    export const createRepository = async (repo: RepositoryItem) : Promise<void> => {
+        try {
+            const response = await axios.post (`${GITHUB_API_URL}/user/repos`, repo, {
+                headers:{
+                    Authorization: `Bearer ${GITHUB_API_TOKEN}`,
+                } });
+                console.log ("Repositorio ingresado", response.data);
+            }
+            catch (error) {
+                console.error ("Error al crear repositorio", error);
+            }
+    };
+
+    
+    //Función para obtener datos de usuario desde GitHub
+    export const getUserInfo = async () : Promise<UserInfo> => {
+        try {
+            const response = await axios.get(`${GITHUB_API_URL}/user`, {
+                headers: {
+                    Authorization: `Bearer ${GITHUB_API_URL}`,
+                }
+            });
+            return response.data as UserInfo;
+        }
+        catch (error){
+            console.error ("Error al obtener información del usuario", error);
+            const userNotFound : UserInfo ={
+                login: 'undefined', 
+                name: 'Usuario no encontrado', 
+                bio: 'No se pudo obtener la información del usuario', 
+                avatar_url: 'https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI='
+            }
+            return userNotFound;
+        }
+    };

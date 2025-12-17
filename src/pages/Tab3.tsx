@@ -1,32 +1,44 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, useIonViewDidEnter } from '@ionic/react';
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
 import './Tab3.css';
+import { getUserInfo } from '../services/GithubService';
+import { useState } from 'react';
+import { UserInfo } from '../interfaces/UserInfo';
 
 const Tab3: React.FC = () => {
+
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+
+  const loadUserInfo = async () => {
+    const info =await getUserInfo();
+    setUserInfo(info);
+  };
+  useIonViewDidEnter(() => {
+    loadUserInfo();
+  })
+
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Perfil de Usuario</IonTitle>
+          <IonTitle>Perfil de usuario</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Perfil de Usuario</IonTitle>
+            <IonTitle size="large">Perfil de usuario</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <IonCard>
-      <img alt="Silhouette of mountains" src="https://avatars.githubusercontent.com/u/191817345?v=4" />
+         <IonCard>
+      <img alt={userInfo?.name}
+      src ={userInfo?.avatar_url} />
       <IonCardHeader>
-        <IonCardTitle>Sophie Chuquillangui</IonCardTitle>
-        <IonCardSubtitle>SophieChuquillangui</IonCardSubtitle>
+        <IonCardTitle>{userInfo?.name}</IonCardTitle>
+        <IonCardSubtitle>{userInfo?.login}</IonCardSubtitle>
       </IonCardHeader>
 
-      <IonCardContent>Soy Diseñadora Gráfica y estudiante de Ingeniería en Informática, entusiasta por los avances
-del mundo moderno y comprometida con el aprendizaje continuo. Me motiva crecer tanto a nivel personal como profesional, aplicando mi conocimiento
-para resolver problemas reales con creatividad y responsabilidad. 
-</IonCardContent>
+      <IonCardContent>{userInfo?.bio}</IonCardContent>
     </IonCard>
       </IonContent>
     </IonPage>
