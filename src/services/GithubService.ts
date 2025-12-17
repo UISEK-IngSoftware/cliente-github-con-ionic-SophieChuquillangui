@@ -27,7 +27,7 @@ export const fetchRepositories = async (): Promise<RepositoryItem[]> => {
             name:repo.name,
             description: repo.description ? repo.description : null,
             owner: repo.owner ? repo.owner.login : null,
-            language : repo.language ? repo.language : null,
+            language: repo.language ? repo.language : null,
         })); 
 
         return repositories; 
@@ -54,11 +54,11 @@ export const fetchRepositories = async (): Promise<RepositoryItem[]> => {
 
     
     //Función para obtener datos de usuario desde GitHub
-    export const getUserInfo = async () : Promise<UserInfo> => {
+    export const getUserInfo = async () : Promise<UserInfo | null> => {
         try {
             const response = await axios.get(`${GITHUB_API_URL}/user`, {
                 headers: {
-                    Authorization: `Bearer ${GITHUB_API_URL}`,
+                    Authorization: `Bearer ${GITHUB_API_TOKEN}`,
                 }
             });
             return response.data as UserInfo;
