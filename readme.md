@@ -3,9 +3,9 @@
 
 ## Información del Estudiante
 
-- **Nombre:** [Tu nombre completo aquí]
-- **Carrera:** [Tu carrera]
-- **Fecha de inicio:** [Fecha]
+- **Nombre:** Sophia Chuquillangui
+- **Carrera:** Ingeniería en Informática
+- **Fecha de inicio:** 07 de Enero, 2026
 
 ---
 
