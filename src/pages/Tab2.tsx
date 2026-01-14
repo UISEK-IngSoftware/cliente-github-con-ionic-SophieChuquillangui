@@ -2,6 +2,7 @@ import { IonButton, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from 
 import { IonInput, IonTextarea} from '@ionic/react';
 
 import './Tab2.css';
+import { useState } from 'react';
 import { useHistory } from 'react-router';
 import { RepositoryItem } from '../interfaces/RepositoryItem';
 import { createRepository } from '../services/GithubService';
@@ -10,13 +11,13 @@ const Tab2: React.FC = () => {
   //Hook: Use History 
   const history = useHistory ();
   //Declaración del nuevo Item
-  const repoFormData : RepositoryItem ={
+const [repoFormData, setRepoFormData] = useState<RepositoryItem>({
     name: '',
     description:  '',
     imageUrl:  null, 
     owner:  null,
     language: null,
-  };
+  });
 
   //Setting de name y description en el componente anterior (es nuevo, ergo, se pedirá al usuario)
   //Ambas funciones se van a conectar al input 
@@ -33,13 +34,24 @@ const Tab2: React.FC = () => {
       return;
     }
   //Catch llamada para gestión de errores 
-    createRepository(repoFormData)
-    .then(() => {history.push ( '/tab1');})
-    .catch (() => {
-      alert ( 'Error al crear el repositorio');
-    });
-  };
 
+  createRepository(repoFormData)
+    .then(() => {
+      // limpiar formulario
+      setRepoFormData({
+        name: '',
+        description: '',
+        imageUrl: null,
+        owner: null,
+        language: null,
+      });
+
+      history.push('/tab1');
+    })
+    .catch(() => {
+      alert('Error al crear el repositorio');
+    });
+};
   return (
     <IonPage>
       <IonHeader>

@@ -1,11 +1,10 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonList, useIonViewDidEnter, IonAlert } from '@ionic/react';
 import './Tab1.css';
 import RepoItem from '../components/RepoItem';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useHistory } from 'react-router';
 import { RepositoryItem } from '../interfaces/RepositoryItem';
-import { fetchRepositories, deleteRepository, updateRepository } from '../services/GithubService';
-import {trashOutline, createOutline} from 'ionicons/icons';
+import { fetchRepositories, deleteRepository } from '../services/GithubService';
 
 const Tab1: React.FC = () => {
   const [repos, setRepos] = useState<RepositoryItem[]> ([]); 
@@ -30,19 +29,16 @@ const Tab1: React.FC = () => {
     console.log("IonViewDidEnter - Cargando Repositorios"); 
     loadRepos();
   }); 
-
+  
           
    // ADD: Llamar a Delete
   const handleDelete = async () => {
-    if (!selectedRepo) return;
+  if (!selectedRepo || !selectedRepo.owner) return;
 
-    try {
-      await deleteRepository(
-        selectedRepo.owner.login,
-        selectedRepo.name
-      );
+     try {
+      await deleteRepository(selectedRepo.owner, selectedRepo.name);
       setRepos(prev =>
-        prev.filter(repo => repo.id !== selectedRepo.id)
+        prev.filter(repo => repo.name !== selectedRepo.name)
       );
     } catch (error) {
       console.error('Error eliminando repositorio', error);
@@ -72,22 +68,22 @@ const Tab1: React.FC = () => {
 
 
         <IonList>
-          /*Iterar en el comoponente de RepoItem, mapearlo con index*/
-          {repos.map((repo,index)=>(
+          {/* Iterar en el componente RepoItem */}
+          {repos.map((repo, index) => (
             <RepoItem
-            key={index}
-            repo={repo}
-            onDelete={() => {
+              key={index}
+              repo={repo}
+              onDelete={() => {
                 setSelectedRepo(repo);
                 setShowAlert(true);
               }}
-            onEdit={() => handleEdit(repo)}
+              onEdit={() => handleEdit(repo)}
             />
           ))}
         </IonList>
-        
-        //Alerta para el Delete 
-        <IonAlert>
+
+        {/* Alerta para el Delete */}
+        <IonAlert
           isOpen={showAlert}
           header="Eliminar repositorio"
           message="¿Deseas eliminar este repositorio?"
@@ -100,8 +96,7 @@ const Tab1: React.FC = () => {
             }
           ]}
           onDidDismiss={() => setShowAlert(false)}
-        </IonAlert>
-
+        />
       </IonContent>
     </IonPage>
   );
