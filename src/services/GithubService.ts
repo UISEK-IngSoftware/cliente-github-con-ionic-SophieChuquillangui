@@ -77,5 +77,26 @@ export const fetchRepositories = async (): Promise<RepositoryItem[]> => {
                 avatar_url: 'https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI='
             }
             return userNotFound;
+        } 
+    };
+
+    //Delete method base (modificar para sliding después)
+    export const deleteRepository = (
+        owner: string,
+        repoName: string
+        ) => {
+        return githubApi.delete(`/repos/${owner}/${repoName}`);
+ };
+
+    //Put/patch method (same as before)
+    export const updateRepository = (
+        owner: string,
+        repoName: string,
+        data: {
+            name?: string;
+            description?: string;
+            private?: boolean;
         }
+        ) => {
+        return githubApi.patch(`/repos/${owner}/${repoName}`, data);
     };

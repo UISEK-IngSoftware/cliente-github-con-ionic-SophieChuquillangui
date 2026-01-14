@@ -1,7 +1,13 @@
-import { IonItem, IonLabel, IonThumbnail } from '@ionic/react';
+import { IonItem, IonLabel, IonThumbnail, IonButton, IonIcon } from '@ionic/react';
 import './RepoItem.css';
 import { RepositoryItem } from '../interfaces/RepositoryItem';
+import { trashOutline, createOutline } from 'ionicons/icons';
 
+interface RepoItemProps {
+  repo: RepositoryItem;
+  onDelete?: () => void;
+  onEdit?: () => void;
+}
 
 const RepoItem: React.FC<{repo: RepositoryItem}> = ({ repo }) => {
   return (
@@ -15,6 +21,15 @@ const RepoItem: React.FC<{repo: RepositoryItem}> = ({ repo }) => {
           <p>Propietario: {repo.owner}</p>
           <p>Lenguaje: {repo.language}</p>
           </IonLabel>
+        
+        <IonButton fill="clear" onClick={onEdit}>
+        <IonIcon icon={createOutline} />
+      </IonButton>
+
+      <IonButton fill="clear" color="danger" onClick={onDelete}>
+        <IonIcon icon={trashOutline} />
+      </IonButton>
+
     </IonItem>
   );
 };
