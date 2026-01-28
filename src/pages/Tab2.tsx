@@ -6,8 +6,11 @@ import { useState } from 'react';
 import { useHistory } from 'react-router';
 import { RepositoryItem } from '../interfaces/RepositoryItem';
 import { createRepository } from '../services/GithubService';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const Tab2: React.FC = () => {
+  const [loading, setLoading] = useState(false);
+
   //Hook: Use History 
   const history = useHistory ();
   //Declaración del nuevo Item
@@ -34,7 +37,7 @@ const [repoFormData, setRepoFormData] = useState<RepositoryItem>({
       return;
     }
   //Catch llamada para gestión de errores 
-
+    setLoading(true);
   createRepository(repoFormData)
     .then(() => {
       // limpiar formulario
@@ -44,13 +47,15 @@ const [repoFormData, setRepoFormData] = useState<RepositoryItem>({
         imageUrl: null,
         owner: null,
         language: null,
-      });
+      })
 
       history.push('/tab1');
     })
     .catch(() => {
       alert('Error al crear el repositorio');
-    });
+    }).finally(()=>{
+        setLoading(false);
+    });;
 };
   return (
     <IonPage>
@@ -90,6 +95,7 @@ const [repoFormData, setRepoFormData] = useState<RepositoryItem>({
                     Guardar
                   </IonButton>
         </div>
+        <LoadingSpinner isOpen={loading} />
       </IonContent>
     </IonPage>
   );

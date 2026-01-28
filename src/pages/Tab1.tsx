@@ -5,16 +5,22 @@ import { useState } from 'react';
 import { useHistory } from 'react-router';
 import { RepositoryItem } from '../interfaces/RepositoryItem';
 import { fetchRepositories, deleteRepository } from '../services/GithubService';
+import LoadingSpinner from '../components/LoadingSpinner';
+
+
 
 const Tab1: React.FC = () => {
+  const [loading, setLoading] = useState(false);
   const [repos, setRepos] = useState<RepositoryItem[]> ([]); 
 
-  //ADICIÓN IMPORTANTE: usar spinners o LoadStateBars
-  
+
   //Declarar función para leer los repositorios desde el Service 
+  //Setting secuencial de LoadingState en true or false
   const loadRepos = async ()=>{
+    setLoading(true);
     const reposData = await fetchRepositories();
     setRepos (reposData);
+    setLoading(false);
   };
 
   //ADD: Alerta de eliminación con hooks: useState + useHistory
@@ -97,6 +103,7 @@ const Tab1: React.FC = () => {
           ]}
           onDidDismiss={() => setShowAlert(false)}
         />
+        <LoadingSpinner isOpen={loading} />
       </IonContent>
     </IonPage>
   );

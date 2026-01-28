@@ -6,7 +6,7 @@ import AuthService from "./AuthService";
 const GITHUB_API_URL = import.meta.env.VITE_API_URL;
 const githubApi = axios.create ({
     baseURL: GITHUB_API_URL,
-});
+   });
 
 //INTERCEPTORES: headers con autorización 
 githubApi.interceptors.request.use ((config) => {
@@ -29,7 +29,8 @@ export const fetchRepositories = async (): Promise<RepositoryItem[]> => {
             per_page: 100,
             sort: "created",
             direction: "desc",
-            affiliation: "owner"
+            affiliation: "owner",
+            t: Date.now()
             }
 
         }); 
@@ -80,7 +81,7 @@ export const fetchRepositories = async (): Promise<RepositoryItem[]> => {
         } 
     };
 
-    //Delete method base (modificar para sliding después)
+    //Delete method base 
     export const deleteRepository = (
         owner: string,
         repoName: string
@@ -88,7 +89,7 @@ export const fetchRepositories = async (): Promise<RepositoryItem[]> => {
         return githubApi.delete(`/repos/${owner}/${repoName}`);
  };
 
-    //Put/patch method (same as before)
+    //Patch method (same as before)
     export const updateRepository = (
         owner: string,
         repoName: string,
